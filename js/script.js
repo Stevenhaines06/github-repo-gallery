@@ -10,7 +10,7 @@ const filterInput = document.querySelector(".filter-repos");
 const gitUserInfo = async function () {
     const userInfo = await fetch (`https://api.github.com/users/${username}`);
     const data = await userInfo.json();
-    console.log(data);
+    //console.log(data);
     displayUserInfo(data)
 }
 gitUserInfo();
@@ -30,13 +30,13 @@ const displayUserInfo = function(data) {
   </div> 
   `
   overview.append(div);
-  gitRepos();
+  gitRepos(username);
 }
 
 const gitRepos = async function() {
     const fetchRepos = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
     const repoData = await fetchRepos.json();
-    console.log(repoData);
+    //console.log(repoData);
     displayRepos(repoData);
 }
 
@@ -60,7 +60,7 @@ repoList.addEventListener("click", function (e) {
 const specificRepoInfo = async function (repoName) {
     const fetchInfo = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
     const repoInfo = await fetchInfo.json();
-    console.log(repoInfo)
+    //console.log(repoInfo)
     const fetchLanguages = await fetch(repoInfo.languages_url);
     const languageData = await fetchLanguages.json();
     //console.log(languageData);
@@ -75,6 +75,7 @@ const specificRepoInfo = async function (repoName) {
 }
 
 const displaySpecificRepoInfo = function(repoInfo, languages) {
+    backToGalleryButton.classList.remove("hide");
     repoData.innerHTML = "";
     const div = document.createElement("div");
     div.innerHTML = `
@@ -102,9 +103,9 @@ filterInput.addEventListener("input", function(e) {
     for (const repo of repos) {
         const repoLowerCased = repo.innerText.toLowerCase();
         if (repoLowerCased.includes(searchLowercase)) {
-            repos.classList.remove("hide")
+            repo.classList.remove("hide")
         } else {
-            repos.classList.add("hide");
+            repo.classList.add("hide");
         }
     }
 });
